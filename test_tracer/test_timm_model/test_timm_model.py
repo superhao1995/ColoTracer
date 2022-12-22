@@ -2,7 +2,10 @@ import pytest
 import timm.models as tm
 import torch
 
-from colossalai.fx import symbolic_trace
+# from colossalai.fx import symbolic_trace
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import symbolic_trace
 
 
 def trace_and_compare(model_cls, data, meta_args=None):
@@ -48,8 +51,10 @@ def test_timm_models_without_control_flow():
 
     data = torch.rand(2, 3, 224, 224)
 
+    meta_args = {'x': data.to('meta')}
+
     for model_cls in MODEL_LIST:
-        trace_and_compare(model_cls, data)
+        trace_and_compare(model_cls, data, meta_args)
 
 
 def test_timm_models_with_control_flow():

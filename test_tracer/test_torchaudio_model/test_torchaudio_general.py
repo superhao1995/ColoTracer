@@ -17,7 +17,7 @@ def test_wave2letter_waveform():
         x = torch.rand(batch_size, num_features, input_length)
         return dict(x=x)
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=False)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False)
 
 
 def test_wave2letter_mfcc():
@@ -32,7 +32,7 @@ def test_wave2letter_mfcc():
         x = torch.rand(batch_size, num_features, input_length)
         return dict(x=x)
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=False)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False)
 
 
 def test_melresnet_waveform():
@@ -50,7 +50,7 @@ def test_melresnet_waveform():
         x = torch.rand(n_batch, n_freq, n_time)
         return dict(specgram=x)
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=False)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False)
 
 
 def test_upsample_network_waveform():
@@ -73,7 +73,7 @@ def test_upsample_network_waveform():
         x = torch.rand(n_batch, n_freq, n_time)
         return dict(specgram=x)
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=False)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False)
 
 
 def test_wavernn_waveform():
@@ -127,19 +127,20 @@ def test_deepspeech():
         x = torch.rand(n_batch, n_channel, n_time, n_feature)
         return dict(x=x)
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=False)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False)
 
 
 if __name__ == '__main__':
     TEST_LIST = [
-        test_wave2letter_waveform,
-        test_wave2letter_mfcc,
-        test_melresnet_waveform,
-        test_upsample_network_waveform,
-        test_wavernn_waveform,
-        test_convtasnet_config,
+        # test_wave2letter_waveform,
+        # test_wave2letter_mfcc,
+        # test_melresnet_waveform,
+        # test_upsample_network_waveform,
+        # # test_wavernn_waveform,
+        # test_convtasnet_config,
         test_deepspeech,
     ]
 
     for test_fn in TEST_LIST:
+        print(test_fn)
         test_fn()

@@ -3,8 +3,10 @@ import torchvision
 import torchvision.models as tm
 from packaging import version
 
-from colossalai.fx import symbolic_trace
-
+# from colossalai.fx import symbolic_trace
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import symbolic_trace
 
 def test_torchvision_models():
     MODEL_LIST = [
@@ -29,7 +31,9 @@ def test_torchvision_models():
         else:
             model = model_cls()
 
-        gm = symbolic_trace(model)
+        meta_args = {'x': data.to('meta')}
+
+        gm = symbolic_trace(model, meta_args=meta_args)
 
         model.eval()
         gm.eval()

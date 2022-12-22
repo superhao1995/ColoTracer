@@ -33,7 +33,7 @@ def test_conformer():
             new_data[f'{k}_1'] = v
         return new_data
 
-    trace_and_compare(model, data_gen, need_meta=False, need_concrete=True, kwargs_transform=kwargs_transform)
+    trace_and_compare(model, data_gen, need_meta=True, need_concrete=False, kwargs_transform=kwargs_transform)
 
 
 @pytest.mark.skip("Tracing failed")
@@ -59,9 +59,10 @@ def test_emformer():
 
 @pytest.mark.skip
 def test_torchaudio_transformers():
-    test_conformer()
-    test_emformer()
-
+    # test_conformer()
+    # test_emformer()
+    print("can't trace dynamic shape")
+    pass
 
 if __name__ == "__main__":
     test_torchaudio_transformers()

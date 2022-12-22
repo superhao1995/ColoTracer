@@ -102,7 +102,9 @@ def test_torchrec_dlrm_models():
         if torch.is_tensor(fx_out):
             assert torch.allclose(
                 fx_out, non_fx_out), f'{model.__class__.__name__} has inconsistent outputs, {fx_out} vs {non_fx_out}'
+            print(model.__class__.__name__)
         else:
+            print(model.__class__.__name__)
             assert torch.allclose(
                 fx_out.values(),
                 non_fx_out.values()), f'{model.__class__.__name__} has inconsistent outputs, {fx_out} vs {non_fx_out}'

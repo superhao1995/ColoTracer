@@ -29,7 +29,7 @@ from colossalai.fx.tracer.registry import (
     meta_patched_module,
 )
 
-__all__ = ['ColoTracer']
+# __all__ = ['ColoTracer']
 
 
 class TracerType(enum.Enum):
@@ -37,7 +37,7 @@ class TracerType(enum.Enum):
     META = 2
 
 
-class ColoTracer(Tracer):
+class OriColoTracer(Tracer):
     """
     ColoTracer is a symbolic tracer designed to support dynamic control flow by using meta tensors for the `colossalai.fx` module.
     This tracer is initialized in the same way as the original torch.fx.Tracer.
@@ -212,6 +212,8 @@ class ColoTracer(Tracer):
             return meta_out
 
         if target in self.orig_torch_tensor_methods:
+            # print("meta computing", target, type(target))
+
             # NOTE: tensor constructors in PyTorch define the `device` argument as
             # *kwargs-only*. That is why this works. If you add methods to
             # _TORCH_METHODS_TO_PATCH that do not define `device` as kwarg-only,

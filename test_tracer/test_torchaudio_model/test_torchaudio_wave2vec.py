@@ -43,6 +43,7 @@ def _smoke_test(model, device):
 @pytest.mark.skip("Tracing failed")
 def test_wav2vec():
     for model_fn in MODEL_LIST:
+        print(model_fn)
         _smoke_test(model_fn(), 'cpu')
 
 

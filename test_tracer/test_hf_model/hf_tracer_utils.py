@@ -3,8 +3,13 @@ from numpy import isin
 from torch.fx import GraphModule
 from torch.utils._pytree import tree_flatten
 
-from colossalai.fx import symbolic_trace
+# from colossalai.fx import symbolic_trace
 
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import symbolic_trace
+
+# from colossalai.fx.tracer.experimental import symbolic_trace
 
 def trace_model_and_compare_output(model, data_gen):
     # must turn on eval mode to ensure the output is consistent

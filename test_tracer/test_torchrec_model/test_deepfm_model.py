@@ -1,7 +1,10 @@
 import pytest
 import torch
 
-from colossalai.fx import symbolic_trace
+# from colossalai.fx import symbolic_trace
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import symbolic_trace
 
 try:
     from torchrec.models import deepfm
@@ -52,31 +55,49 @@ def test_torchrec_deepfm_models():
         elif model_cls == deepfm.SparseArch:
             model = model_cls(ebc)
 
-        # Setup GraphModule
-        gm = symbolic_trace(model)
-
-        model.eval()
-        gm.eval()
+        # # Setup GraphModule
+        # gm = symbolic_trace(model)
+        #
+        # model.eval()
+        # gm.eval()
 
         # Aligned Test
         with torch.no_grad():
             if model_cls == deepfm.DenseArch or model_cls == deepfm.OverArch:
+                meta_args = {"features" : features.to("meta")}
+                gm = symbolic_trace(model, meta_args=meta_args)
+                gm.eval()
+                model.eval()
                 fx_out = gm(features)
                 non_fx_out = model(features)
             elif model_cls == deepfm.FMInteractionArch:
+                meta_args = {"dense_features": features.to("meta")}
+                gm = symbolic_trace(model, meta_args=meta_args)
+                gm.eval()
+                model.eval()
                 fx_out = gm(features, KT)
                 non_fx_out = model(features, KT)
             elif model_cls == deepfm.SimpleDeepFMNN:
+                meta_args = {"dense_features": features.to("meta")}
+                gm = symbolic_trace(model, meta_args=meta_args)
+                gm.eval()
+                model.eval()
                 fx_out = gm(features, KJT)
                 non_fx_out = model(features, KJT)
             elif model_cls == deepfm.SparseArch:
+                meta_args = {"features": KJT.to("meta")}
+                gm = symbolic_trace(model, meta_args=meta_args)
+                gm.eval()
+                model.eval()
                 fx_out = gm(KJT)
                 non_fx_out = model(KJT)
 
         if torch.is_tensor(fx_out):
+            print(model.__class__.__name__)
             assert torch.allclose(
                 fx_out, non_fx_out), f'{model.__class__.__name__} has inconsistent outputs, {fx_out} vs {non_fx_out}'
         else:
+            print(model.__class__.__name__)
             assert torch.allclose(
                 fx_out.values(),
                 non_fx_out.values()), f'{model.__class__.__name__} has inconsistent outputs, {fx_out} vs {non_fx_out}'

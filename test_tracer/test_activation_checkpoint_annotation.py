@@ -3,7 +3,11 @@ import torch.nn as nn
 from torch.fx import GraphModule
 from torch.utils.checkpoint import checkpoint
 
-from colossalai.fx import ColoTracer
+# from colossalai.fx import ColoTracer
+
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import ColoTracer
 
 
 class MLP(torch.nn.Module):
@@ -33,6 +37,21 @@ class MyModule(torch.nn.Module):
         x = checkpoint(self.mlp_2, x)
         x = self.output(x)
         return x
+
+
+# class MyModule(torch.nn.Module):
+#
+#     def __init__(self):
+#         super().__init__()
+#         self.mlp_1 = MLP()
+#         self.mlp_2 = MLP()
+#         self.output = torch.nn.Linear(4, 4)
+#
+#     def forward(self, x):
+#         x = self.mlp_1(x)
+#         x = self.mlp_2(x)
+#         x = self.output(x)
+#         return x
 
 
 def test_activation_checkpoint_annotation():

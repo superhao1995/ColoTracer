@@ -1,6 +1,13 @@
 import torch
 
-from colossalai.fx import symbolic_trace
+# from colossalai.fx import symbolic_trace
+
+import sys
+sys.path.append("/home/lczzh/ColoTracer/")
+from tracer.colo_tracer_new import symbolic_trace
+
+# from colossalai.fx.tracer.experimental import symbolic_trace
+
 
 
 def trace_and_compare(model, data_gen, need_meta=False, need_concrete=False, kwargs_transform=False):
